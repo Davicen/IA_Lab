@@ -80,7 +80,7 @@ def main():
     recorder.listen_in_background(source, record_callback, phrase_time_limit=record_timeout)
 
     # Cue the user that we're ready to go.
-    print("Model loaded.\n")
+    print("Model loaded.\nReady.\n")
 
     while True:
         try:
