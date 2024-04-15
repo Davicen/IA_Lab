@@ -42,6 +42,6 @@ Available command-line arguments:
 
 Note: Additional instructions for Linux users are provided in the script.
 
-#License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
