@@ -1,10 +1,8 @@
-#! python3.7
-
 import argparse
 import os
 import numpy as np
 import speech_recognition
-import whisper
+import whisperx
 import torch
 
 from datetime import datetime, timedelta
@@ -60,7 +58,7 @@ def main():
 
     # Load model
     model = args.model
-    audio_model = whisper.load_model(model)
+    audio_model = whisperx.load_model(model, "cuda")
 
     record_timeout = args.record_timeout
     phrase_timeout = args.phrase_timeout
