@@ -13,7 +13,7 @@ from sys import platform
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default="small", help="Model to use",
+    parser.add_argument("--model", default="medium", help="Model to use",
                         choices=["tiny", "base", "small", "medium", "large"])
     parser.add_argument("--energy_lvl", default=1000,
                         help="Energy level for mic to detect.", type=int)
@@ -58,7 +58,7 @@ def main():
 
     # Load model
     model = args.model
-    audio_model = whisperx.load_model(model, "cuda")
+    audio_model = whisperx.load_model(model, "cuda", compute_type="float16")
 
     record_timeout = args.record_timeout
     phrase_timeout = args.phrase_timeout
@@ -82,6 +82,8 @@ def main():
 
     # Cue the user that we're ready to go.
     print("Model loaded.\nReady.\n")
+
+    result = audio_model.transcribe("C:\\Users\\vicee\\Desktop\\Grabacion.m4a" , language="es")
 
     while True:
         try:
@@ -111,8 +113,9 @@ def main():
                 # Include marker from duration to obtain transcription times
                 time_zero = now
                 # Read the transcription.
-                result = audio_model.transcribe(audio_np, fp16=torch.cuda.is_available())
-                text = result['text'].strip()
+                result = audio_model.transcribe(audio_np, language="es")#, fp16=torch.cuda.is_available())
+
+                text = result['segments'][0]["text"]
                 # Obtain duration of the transcription
                 delta_duration = datetime.utcnow() -time_zero
                 
@@ -122,10 +125,14 @@ def main():
 
                 # If we detected a pause between recordings, add a new item to our transcription.
                 # Otherwise edit the existing one.
+                '''
                 if phrase_complete:
                     transcription.append(text)
                 else:
                     transcription[-1] = text
+                '''
+
+                transcription.append(text)
 
                 # Clear the console to reprint the updated transcription.
                 os.system('cls' if os.name=='nt' else 'clear')
